@@ -56,6 +56,9 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import com.notnoop.mpns.internal.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * The class is used to create instances of {@link MpnsService}.
@@ -87,25 +90,25 @@ public class MpnsServiceBuilder {
     private SecurityInfo securityInfo;
     
     public static class SecurityInfo {
-    	private byte[] cert;
+    	private InputStream cert;
     	private String password;
     	private String name;
     	private String provider;
     	
-    	public SecurityInfo(byte[] cert, String password, String securityName, String securityProvider) {
-    		if( cert == null || cert.length == 0 ||
-    				password == null || "".equals(password.trim()) ||
+    	public SecurityInfo(InputStream cert, String password, String securityName, String securityProvider) {
+    		if( cert == null || 
+                        password == null || "".equals(password.trim()) ||
     				securityName == null || "".equals(securityName.trim()) ) {
     			// provider is optional
     			throw new IllegalArgumentException("Please provide certificate, password, and name");
     		}
-    		this.cert = Arrays.copyOf(cert, cert.length);
+    		this.cert = cert;
     		this.password = password;
     		this.name = securityName;
     		this.provider = securityProvider;
     	}
     	
-    	public byte[] getCert() {
+    	public InputStream getCert() {
     		return cert;
     	}
     	public String getPassword() {
@@ -258,7 +261,7 @@ public class MpnsServiceBuilder {
 	        	} else {
 	        		keyStore = KeyStore.getInstance(securityInfo.getName(), securityInfo.getProvider());
 	        	}
-	        	keyStore.load(new ByteArrayInputStream(securityInfo.getCert()),
+	        	keyStore.load(securityInfo.getCert(),
 	        			securityInfo.getPassword().toCharArray());
 	        				
 	        	KeyManagerFactory kmfactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -272,6 +275,7 @@ public class MpnsServiceBuilder {
 	     
 	        	Scheme https = new Scheme("https", 443, sslSocketFactory);
 	        	client.getConnectionManager().getSchemeRegistry().register(https);
+                        securityInfo.getCert().close();
         	} catch( Exception e ) {
         		throw new IllegalArgumentException(e);
         	}

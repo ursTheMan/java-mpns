@@ -149,8 +149,7 @@ public final class Utilities {
         }
 
         // Didn't find anything
-        assert false;
-        return null;
+        return MpnsResponse.UNKNOWN;
     }
 
     public static void fireDelegate(MpnsNotification message, HttpResponse response, MpnsDelegate delegate) {

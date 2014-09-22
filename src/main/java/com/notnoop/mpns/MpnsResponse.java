@@ -37,13 +37,7 @@ public enum MpnsResponse {
     /*
      * The notification request was accepted and queued for delivery.
      */
-    RECEIVED(200, "Received", "Connected", "Active", true, false),
-
-    /**
-     * The notification request was accepted and queued for delivery. However,
-     * the device is temporarily disconnected.
-     */
-    QUEUED(200, "Received", "Temporarily Disconnected", "Active", true, false),
+    RECEIVED(200, "Received", null, "Active", true, false),    
 
     /**
      * Queue overflow. The web service should re-send the notification later.
@@ -109,7 +103,10 @@ public enum MpnsResponse {
      * service should re-send the notification later. A best practice is to
      * use an exponential backoff algorithm in minute increments.
      */
-    SERVICE_UNAVAILABLE(503, null, null, null, false, true);
+    SERVICE_UNAVAILABLE(503, null, null, null, false, true),
+    
+    FORBIDDEN(403, null, null, null, false, false),
+    UNKNOWN(666, null, null, null, false, false);
 
     //// Response Code,NotificationStatus,DeviceConnectionStatus,SubscriptionStatus,Comments
     private final int responseCode;

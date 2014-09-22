@@ -3,8 +3,8 @@
   <groupId>com.notnoop.mpns</groupId>
   <artifactId>mpns</artifactId>
   <name>Java Microsoft Push Notification Service Library</name>
-  <version>0.0.2</version>
-
+  <version>0.0.5</version>
+<!-- from fork https://github.com/vhong/java-mpns -->
     <!-- Inherit the Sonatype OSS deployment configuration -->
     <!--
     <parent>
